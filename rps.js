@@ -24,38 +24,23 @@ function playRound(playerSelection, computerSelection) {
     }
   }
   
-function playGame() {
-    let playerScore = 0;
-    let computerScore = 0;
+// function to handle button clicks
+function handleClick(event) {
+    const playerSelection = event.target.id.toLowerCase();
+    const computerSelection = getComputerChoice();
 
-    for (let i = 0; i < 5; i++) {
-        const playerSelection = prompt("Enter your choice (Rock, Paper, Scissors): ");
-        const computerSelection = getComputerChoice();
+    console.log(`Player's choice: ${playerSelection}`);
+    console.log(`Computer's choice: ${computerSelection}`);
 
-        console.log(`Round ${i + 1  }: `);
-        console.log(`Player's choice: ${playerSelection}`);
-        console.log(`Computer's choice: ${computerSelection}`);
-
-        const result = playRound(playerSelection, computerSelection);
-        console.log(result);
-
-        // update the scores
-        if (result.includes('Win')) {
-            playerScore++;
-        } else if (result.includes('Lose')) {
-            computerScore++;
-        }
-    }
-
-    // finding the winner
-    if (playerScore > computerScore) {
-        console.log("Congrats, You Won!!!");
-    } else if (playerScore < computerScore) {
-        console.log("You lose :( Try again...");
-    } else {
-        console.log("It's a tie!!!`")
-    }
+    const result = playRound(playerSelection, computerSelection);
+    console.log(result);
 }
-  
-// runs the game
-playGame();
+
+// add event listeners to buttons
+const rockButton = document.getElementById("rock");
+const paperButton = document.getElementById("paper");
+const scissorsButton = document.getElementById("scissors");
+
+rockButton.addEventListener('click', handleClick);
+paperButton.addEventListener('click', handleClick);
+scissorsButton.addEventListener('click', handleClick);
