@@ -8,39 +8,79 @@ function getComputerChoice() {
 // function to play a single round
 function playRound(playerSelection, computerSelection) {
     playerSelection = playerSelection.toLowerCase();
+
     // check for tie
     if (playerSelection === computerSelection.toLowerCase()) {
-        return "It's a tie!";
+        return { result: "It's a tie!", winner: 'tie' };
     }
+
     // check for player win conditions
     if (
         (playerSelection === 'rock' && computerSelection === 'Scissors') ||
         (playerSelection === 'paper' && computerSelection === 'Rock') ||
         (playerSelection === 'scissors' && computerSelection === 'Paper')
     ) {
-        return `You win! ${playerSelection} beats ${computerSelection}.`; 
+        return { result: `You win! ${playerSelection} beats ${computerSelection}.`, winner: 'player' };
     } else {
-        return `You lose! ${computerSelection} beats ${playerSelection}.`; 
+        return { result: `You lose! ${computerSelection} beats ${playerSelection}.`, winner: 'computer' };
     }
-  }
-  
-// function to handle button clicks
-function handleClick(event) {
-    const playerSelection = event.target.id.toLowerCase();
-    const computerSelection = getComputerChoice();
-
-    console.log(`Player's choice: ${playerSelection}`);
-    console.log(`Computer's choice: ${computerSelection}`);
-
-    const result = playRound(playerSelection, computerSelection);
-    console.log(result);
 }
 
-// add event listeners to buttons
-const rockButton = document.getElementById("rock");
-const paperButton = document.getElementById("paper");
-const scissorsButton = document.getElementById("scissors");
+// Update display with the result
+function displayResult(result) {
+    const resultDisplay = document.getElementById('results');
+    resultDisplay.textContent = result;
+}
 
-rockButton.addEventListener('click', handleClick);
-paperButton.addEventListener('click', handleClick);
-scissorsButton.addEventListener('click', handleClick);
+// Update display with the scores
+function displayScore(playerScore, computerScore) {
+    const scoreDisplay = document.getElementById('score');
+    scoreDisplay.textContent = `Player: ${playerScore} - Computer: ${computerScore}`;
+}
+
+// Main function to play the game
+function playGame() {
+    let playerScore = 0;
+    let computerScore = 0;
+
+    // Add event listeners to buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            const playerSelection = this.id;
+            const computerSelection = getComputerChoice();
+            const result = playRound(playerSelection, computerSelection);
+
+            displayResult(result.result);
+
+            // Update the scores
+            if (result.winner === 'player') {
+                playerScore++;
+            } else if (result.winner === 'computer') {
+                computerScore++;
+            }
+
+            displayScore(playerScore, computerScore);
+
+            // Check for winner
+            if (playerScore === 5) {
+                alert("Congrats, You Won!!!");
+                resetGame();
+            } else if (computerScore === 5) {
+                alert("You lose :( Try again...");
+                resetGame();
+            }
+        });
+    });
+}
+
+// Function to reset the game
+function resetGame() {
+    const scoreDisplay = document.getElementById('score');
+    const resultDisplay = document.getElementById('results');
+    scoreDisplay.textContent = '';
+    resultDisplay.textContent = '';
+}
+
+// Run the game
+playGame();
